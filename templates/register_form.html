@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Registration Form</h2>
+
+<form action="/register" method="POST" id="regForm">
+    Email address: <input type="text" name="email" id="email">
+    <br><br>
+    Password: <input type="text" name="password" id="password">
+    <br><br>
+    <input type="submit" value="Register">
+</form>
+
+<script>
+    
+    function checkEmail() {
+
+        if (//User.query.filter(User.email==email).one() is True:) {
+            evt.preventDefault();
+
+            var formInputs = {
+                "email": $("#email").val(),
+                "password": $("#password").val()
+            };
+
+            $.post("/register",
+                formInputs,
+                alert("Thank you for registering.")
+                );
+
+
+        } else {
+            evt.preventDefault();
+            alert("This email address is already registered.");
+        };
+    }
+
+    $("#regForm").on("submit", checkEmail);
+</script>
+
+
+{% endblock %}
