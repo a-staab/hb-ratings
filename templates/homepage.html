@@ -9,4 +9,21 @@
 <h2>Users</h2>
 <p><a href="/users">View all users</a></p>
 
+<button id="logOut">Log Out</button>
+<button id="logIn" hidden>Log In</button>
+
+<script>
+    $("#logOut").on("click", function () {
+        $.post("/logged_out");
+        alert("You have logged out.");
+
+ 
+        // TODO
+        // Add functionality to show log in and hide log out,
+        // and redirect to login page
+        // $("#logIn").
+
+    });
+</script>
+
 {% endblock %}

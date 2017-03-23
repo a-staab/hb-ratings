@@ -53,11 +53,63 @@ def register_process():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    # remember to commit add
+    if User.query.filter(User.email == email).all():
+        flash("This email address is already registered.")
+        return render_template("register_form.html")
+    else:
+        sql = """INSERT INTO users (email, password)
+                 VALUES (:email, :password)
+              """
 
-    db.session.add()
-    db.session.commit()
+        db.session.execute(sql,
+                           {'email': email,
+                            'password': password})
 
+        db.session.commit()
+        flash("Thank you for registering!")
+        return redirect("/")
+
+
+@app.route("/login", methods=["GET"])
+def login_form():
+
+    email = request.args.get("email")
+    password = request.args.get("password")
+
+    return render_template("login_form.html",
+                           email=email,
+                           password=password)
+
+
+@app.route("/login", methods=["POST"])
+def login_process():
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    if User.query.filter(User.email == email).all():
+
+        if User.query.filter(User.email == email).one().password == password:
+            
+            # query for user id on existing email, add to session
+            user_id = User.query.filter(User.email == email).one().user_id 
+            session["user_id"] = user_id
+
+            flash("Login successful!")
+            return redirect("/")
+
+    flash("Your email and password don't match. Please try again!")
+    return render_template("login_form.html")
+
+
+@app.route("/logged_out", methods=["POST"])
+def log_out():
+
+    # print "/logged out working!!!"
+    # session.clear()
+    print session
+    del session["user_id"]
+    print session
     return redirect("/")
 
 
@@ -73,5 +125,5 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
 
-    
+
     app.run(port=5000, host='0.0.0.0')

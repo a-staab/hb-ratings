@@ -1,21 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Registration Form</h2>
+<h2>Login Form</h2>
 
-<form action="/register" method="POST" id="regForm">
+<form action="/login" method="POST" id="loginForm">
     Email address: <input type="text" name="email" id="email">
     <br><br>
     Password: <input type="text" name="password" id="password">
     <br><br>
-    <input type="submit" value="Register">
+    <input type="submit" value="Log In">
 </form>
 
 <script>
     
-    function checkEmail() {
-
-        //  {if (//User.query.filter(User.email==email).one() is True:)
+    function checkLogin() {
             
         evt.preventDefault();
 
@@ -24,17 +22,12 @@
             "password": $("#password").val()
         };
 
-        $.post("/register",
+        $.post("/login",
             formInputs
             );
-
-        // } else {
-        //     evt.preventDefault();
-        //     alert("This email address is already registered.");
-        // };
     }
 
-    $("#regForm").on("submit", checkEmail);
+    $("#loginForm").on("submit", checkLogin);
 </script>
 
 
