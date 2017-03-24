@@ -52,7 +52,12 @@ def movie_list():
 
     return render_template("movies_list.html", movies=movies)
 
-# @app.route
+
+@app.route("/movies/<int:movie_id>")
+def movie(movie_id):
+
+    movie = Movie.query.get(movie_id)
+    return render_template("movie.html", movie=movie)
 
 
 @app.route("/register", methods=["GET"])
@@ -130,6 +135,35 @@ def log_out():
     del session["user_id"]
     print session
     return redirect("/")
+
+
+@app.route("/rate", methods=["POST"])
+def rate_movie():
+
+    score = request.form.get("rating")
+    movie_id = request.form.get("movie_id")
+    user_id = session["user_id"]
+
+    rating = Rating.query.filter(Rating.user_id == user_id, Rating.movie_id==movie_id).first()
+    if rating:    
+
+        rating.score = score
+        flash("Thank you for updating your rating!")
+
+    else:
+       
+        rating = Rating(score=score,
+                        movie_id=movie_id,
+                        user_id=user_id
+                        )
+
+        db.session.add(rating)
+        flash("Thank you for rating!")
+
+    db.session.commit()
+    
+    return redirect("/movies")
+
 
 
 if __name__ == "__main__":

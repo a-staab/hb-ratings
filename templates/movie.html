@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>Movie {{ user.user_id }}</h2>
+    <h2>{{ movie.title }}</h2>
 
-    <p>Age: {{ user.age }}</p>
+    <p><a href="{{ movie.imdb_url }}">IMDB link</a></p>
     
-    <p>Zipcode: {{ user.zipcode }}</p>
-    
-    <p>Movies Rated:<p>
+<form action="/rate" method="POST" id="rate">
+    How would you rate this movie?
+    <br>
+    <input type="radio" name="rating" value="1">1
+    <input type="radio" name="rating" value="2">2
+    <input type="radio" name="rating" value="3">3
+    <input type="radio" name="rating" value="4">4
+    <input type="radio" name="rating" value="5">5
+    <input type="submit" value="Rate it!">
+    <input type="hidden" name="movie_id" value="{{ movie.movie_id }}">
+</form>
 
-    {% for rating in user.ratings %}
-        <p>{{ rating.movie.title }}<br>rating: {{ rating.score }}</p>
-    {% endfor %}
+
+    <p>Ratings:<p>
+
+        {% for rating in movie.ratings %}
+        <p>{{ rating.score }} : {{ rating.user.user_id }}</p>
+
+    {% endfor %}    
 
 {% endblock %}
